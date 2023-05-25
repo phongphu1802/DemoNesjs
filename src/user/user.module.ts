@@ -4,9 +4,10 @@ import { UserService } from './user.service';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
+import { RoleModule } from 'src/role/role.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), NestjsFormDataModule],
+  imports: [TypeOrmModule.forFeature([User]), NestjsFormDataModule, RoleModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService],
