@@ -10,14 +10,13 @@ import {
   Delete,
 } from '@nestjs/common';
 import { FormDataRequest } from 'nestjs-form-data';
-import { CreateUserDto } from './user.dto';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { TransformInterceptor } from 'src/transform.interceptor';
 import { ResponseMessage } from 'src/response.decorator';
 import { USER_DELETED, USER_INSERTED, USER_SELECTED, USER_UPDATED } from 'src/response.constants';
 import { RoleService } from 'src/role/role.service';
-import { Role } from 'src/role/role.entity';
 
 @Controller('users')
 export class UserController {
@@ -49,24 +48,15 @@ export class UserController {
   @FormDataRequest()
   @UseInterceptors(TransformInterceptor)
   @ResponseMessage(USER_INSERTED)
-  async create(@Body() user: CreateUserDto): Promise<User> {
-    const roles = [];
-    user.role.map(async (data) => {
-      const role = await this.roleService.findOne(data);
-      roles.push(role);
-    });
-    if (roles.length > 0) {
-      console.log(roles);
-      const userData = Object.assign(user, { role: roles });
-      return this.userService.create(userData);
-    }
+  async create(@Body() User: CreateUserDto): Promise<User> {
+    return this.userService.create(User);
   }
 
   //update user
   @Put(':id')
   @UseInterceptors(TransformInterceptor)
   @ResponseMessage(USER_UPDATED)
-  async update(@Param('id') id: number, @Body() user: User): Promise<any> {
+  async update(@Param('id') id: number, @Body() user: UpdateUserDto): Promise<User> {
     return this.userService.update(id, user);
   }
 

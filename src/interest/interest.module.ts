@@ -5,5 +5,6 @@ import { InterestService } from './interest.service';
 @Module({
   controllers: [InterestController],
   providers: [InterestService],
+  exports: [InterestService],
 })
 export class InterestModule {}
